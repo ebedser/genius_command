@@ -20,9 +20,9 @@ for term in searchList:
         searchUrl += (term + "+")
 searchUrl = searchUrl[0:len(searchUrl)-1]
 http = urllib3.PoolManager()
-page = http.request('GET', searchUrl)
-page = BeautifulSoup(page.data, 'lxml')
-resultList = page.find_all('a', attrs={'class': ' song_link'})
+searchPage = http.request('GET', searchUrl)
+searchPage = BeautifulSoup(searchPage.data, 'lxml')
+resultList = searchPage.find_all('a', attrs={'class': ' song_link'})
 lyricsUrl = ""
 for result in resultList:
     url = result.get('href')
