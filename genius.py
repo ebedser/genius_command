@@ -4,8 +4,9 @@ import lxml
 from bs4 import BeautifulSoup
 import argparse
 import urllib3
+import certifi
 
-urllib3.disable_warnings()
+#urllib3.disable_warnings()
 #https://genius.com/search?q=word1+word2  <-search
 #https://genius.com/word1-word2-lyrics <- lyric at end for lyric urls
 
@@ -19,7 +20,10 @@ for term in searchList:
     if term != "":
         searchUrl += (term + "+")
 searchUrl = searchUrl[0:len(searchUrl)-1]
-http = urllib3.PoolManager()
+http = urllib3.PoolManager(
+    cert_reqs= 'CERT_REQUIRED',
+    ca_certs= certifi.where()
+)
 searchPage = http.request('GET', searchUrl)
 searchPage = BeautifulSoup(searchPage.data, 'lxml')
 resultList = searchPage.find_all('a', attrs={'class': ' song_link'})
