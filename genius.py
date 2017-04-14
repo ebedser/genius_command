@@ -4,16 +4,33 @@ import lxml, argparse, urllib3, certifi, sys
 from bs4 import BeautifulSoup
 from termcolor import colored, cprint
 
-#urllib3.disable_warnings()
 #https://genius.com/search?q=word1+word2  <-search
 #https://genius.com/word1-word2-lyrics <- lyric at end for lyric urls
+
+# not implemented yet
+help = """
+usage: genius.py [-h] [-m] [-b] S [S ...]
+
+positional arguments:
+S             the search terms
+
+optional arguments:
+-h, --help    show this help message and exit
+-m            use menu for song selection
+-b            bolds titles
+"""
 
 def yesOrNo(text=""):
     """Asks for user to input y or n. Returns true if y"""
     response = input(text + " (y/n)? ")
     return(response.lower() == "y")
 
-
+def cleanNonAlNum(aString):
+    newString = ""
+    for i in aString:
+        if(i.isalnum()):
+            newString += i
+    return newString
 #cprint('[Chorus]', 'white', attrs=['bold'], end=' ')
 def formatText(inputText):
     textList = inputText.split('\n')
@@ -74,6 +91,5 @@ if(choice < len(optionList) and choice >= 0): # get and display chosen lyrics
 else:
     print("Not a valid option")
 
-
-
+print(cleanNonAlNum("Joey Bada$$"))
 
