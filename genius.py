@@ -25,12 +25,13 @@ def yesOrNo(text=""):
     response = input(text + " (y/n)? ")
     return(response.lower() == "y")
 
-def cleanNonAlNum(aString):
+def cleanNonAlnum(aString):
     newString = ""
     for i in aString:
         if(i.isalnum()):
             newString += i
     return newString
+
 #cprint('[Chorus]', 'white', attrs=['bold'], end=' ')
 def formatText(inputText):
     textList = inputText.split('\n')
@@ -86,10 +87,5 @@ if(choice < len(optionList) and choice >= 0): # get and display chosen lyrics
     lyricsPage = BeautifulSoup(lyricsPage.data, 'lxml')
     lyrics = lyricsPage.find('lyrics',attrs={'class': 'lyrics'}).text
     print("\n" + optionList[choice])
-    formatText(lyrics)
-    #print(lyrics)
-else:
-    print("Not a valid option")
 
-print(cleanNonAlNum("Joey Bada$$"))
-
+print(lyrics)
