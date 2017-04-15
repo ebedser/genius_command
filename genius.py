@@ -29,15 +29,18 @@ def cleanNonAlnum(aString):
     newString = ""
     for i in aString:
         if(i.isalnum()):
-            newString += i
+            newString += i.lower()
     return newString
 
 #cprint('[Chorus]', 'white', attrs=['bold'], end=' ')
-def formatText(inputText):
+def printLyrics(inputText):
     textList = inputText.split('\n')
     for line in textList:
+        if line != "":
+            if line[0] == "[":
+                cprint(line, 'white', attrs=['bold'])
+                continue
         print(line)
-
 # get command line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("searchTerms", help="terms for which you are searching")
@@ -54,6 +57,7 @@ http = urllib3.PoolManager(
 searchUrl = "https://genius.com/search?q="
 for term in searchList:
     if term != "":
+        term = cleanNonAlnum(term)
         searchUrl += (term + "+")
 
 searchUrl = searchUrl[0:len(searchUrl)-1] # remove the last '+' from the url
@@ -77,8 +81,12 @@ for i in range(len(optionList)): # create option list
     optionList[i] = optionList[i][1:len(optionList[i])-1] 
     print(str(i) + ") " + optionList[i])
 
-choice = int(input("Choose an option ( 0-" + str(len(optionList)-1) + " ): "))
-
+choice = input("Choose an option ( 0-" + str(len(optionList)-1) + " ): ")
+if(str(choice) in "1234567890" and str(choice) != ""):
+    choice = int(choice)
+else:
+    print(choice + " is not a valid option")
+    quit()
 if(choice < len(optionList) and choice >= 0): # get and display chosen lyrics
     lyricsUrl = urlList[choice]
     lyricsPage = http.request('GET', lyricsUrl)
@@ -86,6 +94,8 @@ if(choice < len(optionList) and choice >= 0): # get and display chosen lyrics
     lyricsPage = http.request('GET', lyricsUrl)
     lyricsPage = BeautifulSoup(lyricsPage.data, 'lxml')
     lyrics = lyricsPage.find('lyrics',attrs={'class': 'lyrics'}).text
-    print("\n" + optionList[choice])
+    cprint("\n" + optionList[choice], 'white', attrs=['bold'])
+else:
+    quit()
 
-print(lyrics)
+printLyrics(lyrics)
